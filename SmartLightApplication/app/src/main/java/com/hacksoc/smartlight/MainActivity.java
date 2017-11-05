@@ -23,6 +23,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -64,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Microcontroller micro = retrofit.create(Microcontroller.class);
 
             if(onOffButton.isChecked()) {
-                bulb.setText("Off");
                 micro.off(
                         "off",
                         new Callback<Response>() {
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 );
             }
             else {
-                bulb.setText("On");
                 micro.on(
                         "on",
                         new Callback<Response>() {
@@ -183,7 +183,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String str = hexResult.substring(i, i + 2);
                     result.append((char)Integer.parseInt(str, 16));
                 }
-                sensorReading.append("Current room temperature: " + result + "\u00B0 C\n");
+                sensorReading.setText("Room temperature at " +
+                        new SimpleDateFormat("HH:mm:ss").format(new Date()) +
+                        " was " + result + "\u00B0 C\n" +
+                        sensorReading.getText());
             } catch (JSONException e) {
                 Log.e("JSONException", "Error: " + e.toString());
             }
